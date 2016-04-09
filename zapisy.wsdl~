@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="zapisy" 
+	targetNamespace="localhost/zapisy.wsdl" 
+	xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:tns="localhost/zapisy.wsdl" 
+	xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:s="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+>
+<wsdl:types>
+	<!-- Typy danych, odwzorowują typy encji w bazie danych -->
+	<!--<import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>-->
+	<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="2.xds">
+		<xs:simpleType name="godzina">
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-2][0-9]:[0-5][0-9]"/>
+			</xs:restriction>
+		</xs:simpleType>
+		<xs:simpleType name="id">
+			<xs:restriction base="xs:integer"/>
+		</xs:simpleType>
+		<xs:simpleType name="csv">
+			<xs:restriction base="xs:integer"/>
+		</xs:simpleType>
+		<xs:simpleType name="filename">
+			<xs:restriction base="xs:integer"/>
+		</xs:simpleType>
+		<xs:simpleType name="nr_index">
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[0-9]{6}"/>
+			</xs:restriction>
+		</xs:simpleType>
+		<xs:simpleType name="wynik">
+			<xs:restriction base="xs:string">
+				<xs:pattern value="ok|blad"/>
+			</xs:restriction>
+		</xs:simpleType>
+		<xs:complexType name="student">
+			<xs:all>
+				<xs:element name="imie" type="xs:string"/>
+				<xs:element name="nazwisko" type="xs:string"/>
+				<xs:element name="index" type="nr_index"/>
+			</xs:all>
+		</xs:complexType>
+		<xs:complexType name="temat">
+			<xs:all>
+				<xs:element name="temat" type="xs:string"/>
+				<xs:element name="opis" type="xs:string"/>
+				<xs:element name="miejsca" type="xs:nonNegativeInteger"/>
+				<xs:element name="wolne_miejsca" type="xs:nonNegativeInteger"/>
+			</xs:all>
+		</xs:complexType>
+		<xs:complexType name="termin">
+			<xs:all>
+				<xs:element name="dzien" type="xs:string"/>
+				<xs:element name="godzina_od" type="godzina"/>
+				<xs:element name="godzina_od" type="godzina"/>
+				<xs:element name="miejsca" type="xs:int"/>
+			</xs:all>
+		</xs:complexType>
+		<xs:complexType name="sala">
+			<xs:all>
+				<xs:element name="numer" type="xs:string"/>
+				<xs:element name="max_miejsc" type="xs:nonNegativeInteger"/>
+			</xs:all>	
+		</xs:complexType>
+		<xs:complexType name="przedmiot">
+			<xs:all>
+				<xs:element name="nazwa" type="xs:string"/>
+				<xs:element name="typ" type="xs:integer"/>
+			</xs:all>
+		</xs:complexType>
+		<xs:complexType name="typ">
+			<!-- Ten typ moze byc niepotrzebny (scalic z przedmiot?) -->
+			<xs:all>
+				<xs:element name="id" type="xs:integer"/>
+				<xs:element name="opis" type="xs:string"/>
+			</xs:all>
+		</xs:complexType>
+		<xs:complexType name="prowadzacy">
+			<xs:all>
+				<xs:element name="email" type="xs:string"/>
+				<xs:element name="haslo" type="xs:string"/>
+			</xs:all>
+		</xs:complexType>
+	</xs:schema>
+</wsdl:types>
+
+<wsdl:message name="zapis_projekt">
+	<wsdl:part name="ID" type="id"/>
+	<wsdl:part name="zapisywany" type="student"/>
+</wsdl:message>
+
+<wsdl:message name="id_message">
+	<wsdl:part name="ID" type="id"/>
+</wsdl:message>
+
+<wsdl:message name="zapis_termin">
+	<wsdl:part name="ID" type="id"/>
+	<wsdl:part name="zapisywany" type="student"/>
+</wsdl:message>
+
+<wsdl:message name="nowy_termin">
+	<wsdl:part name="termin" type="termin"/>
+</wsdl:message>
+
+<wsdl:message name="nowy_projekt">
+	<wsdl:part name="projekt" type="temat"/>
+</wsdl:message>
+
+<wsdl:message name="plik_csv">
+	<wsdl:part name="nazwa" type="filename"/>
+	<wsdl:part name="plik" type="csv"/>
+</wsdl:message>
+
+<wsdl:message name="info_zwrotne">
+	<wsdl:part name="rezultat" type="wynik"/>
+</wsdl:message>
+
+<wsdl:portType name="zapisy">
+	<wsdl:operation name="zapisz_projekt">
+		<wsdl:input message="tns:zapis_projekt"/>
+		<wsdl:output message="tns:info_zwrotne"/>
+	</wsdl:operation>
+	<wsdl:operation name="zapisz_termin">
+		<wsdl:input message="tns:zapis_projekt"/>
+		<wsdl:output message="tns:info_zwrotne"/>
+	</wsdl:operation>
+	<wsdl:operation name="dodaj_projekt">
+		<wsdl:input message="tns:nowy_projekt"/>
+		<wsdl:output message="tns:info_zwrotne"/>
+	</wsdl:operation>
+	<wsdl:operation name="dodaj_termin">
+		<wsdl:input message="tns:nowy_termin"/>
+		<wsdl:output message="tns:info_zwrotne"/>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_projekt">
+		<wsdl:input message="tns:id_message"/>
+		<wsdl:output message="tns:plik_csv"/>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_termin">
+		<wsdl:input message="tns:id_message"/>
+		<wsdl:output message="tns:plik_csv"/>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_przedmiot">
+		<wsdl:input message="tns:id_message"/>
+		<wsdl:output message="tns:plik_csv"/>
+	</wsdl:operation>
+</wsdl:portType>
+
+<wsdl:binding type="tns:zapisy" name="zapisy">
+	<soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+	<wsdl:operation name="zapisz_projekt">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="dodaj_projekt">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="zapisz_termin">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="dodaj_termin">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_projekt">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_termin">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+	<wsdl:operation name="eksportuj_przedmiot">
+		<soap:operation style="rpc" soapAction=""/>
+		<wsdl:input>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:input>
+		<wsdl:output>
+			<soap:body use="encoded" namespace="tns" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+		</wsdl:output>
+	</wsdl:operation>
+</wsdl:binding>
+
+
+<wsdl:service name="zapisy">
+ <wsdl:documentation>gSOAP 2.7.9k generated service definition</wsdl:documentation>
+ <wsdl:port name="zapisy" binding="tns:zapisy">
+	<soap:address location="http://127.0.0.1/"/>
+ </wsdl:port>
+</wsdl:service>
+
+</wsdl:definitions> 
