@@ -3,6 +3,13 @@
 #include <iostream>
 #include <sstream>
 
+#include "mysql_connection.h"
+
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
+
 void *process_request(void *serviceCopy)
 {
     pthread_detach(pthread_self());
@@ -15,6 +22,8 @@ void *process_request(void *serviceCopy)
 
 int main()
 {
+
+
     zapisyService service(SOAP_IO_KEEPALIVE);
 
     soap_init2(service.soap, SOAP_IO_KEEPALIVE, SOAP_IO_KEEPALIVE | SOAP_XML_INDENT);
