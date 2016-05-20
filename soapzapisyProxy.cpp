@@ -151,7 +151,7 @@ char *zapisyProxy::soap_sprint_fault(char *buf, size_t len)
 }
 #endif
 
-int zapisyProxy::zapiszProjekt(const char *endpoint, const char *soap_action, std::string ID, z1__student *zapisywany, struct z1__zapiszProjektResponse &_param_1)
+int zapisyProxy::zapiszProjekt(const char *endpoint, const char *soap_action, std::string projektID, std::string zapisywanyID, struct z1__zapiszProjektResponse &_param_1)
 {	struct soap *soap = this->soap;
 	struct z1__zapiszProjekt soap_tmp_z1__zapiszProjekt;
 	if (endpoint)
@@ -160,8 +160,8 @@ int zapisyProxy::zapiszProjekt(const char *endpoint, const char *soap_action, st
 		soap_endpoint = "http://127.0.0.1/";
 	if (soap_action == NULL)
 		soap_action = "";
-	soap_tmp_z1__zapiszProjekt.ID = ID;
-	soap_tmp_z1__zapiszProjekt.zapisywany = zapisywany;
+	soap_tmp_z1__zapiszProjekt.projektID = projektID;
+	soap_tmp_z1__zapiszProjekt.zapisywanyID = zapisywanyID;
 	soap_begin(soap);
 	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
 	soap_serializeheader(soap);
@@ -208,7 +208,7 @@ int zapisyProxy::zapiszProjekt(const char *endpoint, const char *soap_action, st
 	return soap_closesock(soap);
 }
 
-int zapisyProxy::dodajProjekt(const char *endpoint, const char *soap_action, z1__temat *projekt, struct z1__dodajProjektResponse &_param_2)
+int zapisyProxy::dodajProjekt(const char *endpoint, const char *soap_action, std::string przedmiotID, z1__temat *projekt, struct z1__dodajProjektResponse &_param_2)
 {	struct soap *soap = this->soap;
 	struct z1__dodajProjekt soap_tmp_z1__dodajProjekt;
 	if (endpoint)
@@ -217,6 +217,7 @@ int zapisyProxy::dodajProjekt(const char *endpoint, const char *soap_action, z1_
 		soap_endpoint = "http://127.0.0.1/";
 	if (soap_action == NULL)
 		soap_action = "";
+	soap_tmp_z1__dodajProjekt.przedmiotID = przedmiotID;
 	soap_tmp_z1__dodajProjekt.projekt = projekt;
 	soap_begin(soap);
 	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
@@ -264,7 +265,7 @@ int zapisyProxy::dodajProjekt(const char *endpoint, const char *soap_action, z1_
 	return soap_closesock(soap);
 }
 
-int zapisyProxy::zapiszTermin(const char *endpoint, const char *soap_action, std::string ID, z1__student *zapisywany, struct z1__zapiszTerminResponse &_param_3)
+int zapisyProxy::zapiszTermin(const char *endpoint, const char *soap_action, std::string projektID, std::string zapisywanyID, struct z1__zapiszTerminResponse &_param_3)
 {	struct soap *soap = this->soap;
 	struct z1__zapiszTermin soap_tmp_z1__zapiszTermin;
 	if (endpoint)
@@ -273,8 +274,8 @@ int zapisyProxy::zapiszTermin(const char *endpoint, const char *soap_action, std
 		soap_endpoint = "http://127.0.0.1/";
 	if (soap_action == NULL)
 		soap_action = "";
-	soap_tmp_z1__zapiszTermin.ID = ID;
-	soap_tmp_z1__zapiszTermin.zapisywany = zapisywany;
+	soap_tmp_z1__zapiszTermin.projektID = projektID;
+	soap_tmp_z1__zapiszTermin.zapisywanyID = zapisywanyID;
 	soap_begin(soap);
 	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
 	soap_serializeheader(soap);
@@ -321,7 +322,7 @@ int zapisyProxy::zapiszTermin(const char *endpoint, const char *soap_action, std
 	return soap_closesock(soap);
 }
 
-int zapisyProxy::dodajTermin(const char *endpoint, const char *soap_action, z1__termin *termin, struct z1__dodajTerminResponse &_param_4)
+int zapisyProxy::dodajTermin(const char *endpoint, const char *soap_action, std::string przedmiotID, std::string salaID, z1__termin *termin, struct z1__dodajTerminResponse &_param_4)
 {	struct soap *soap = this->soap;
 	struct z1__dodajTermin soap_tmp_z1__dodajTermin;
 	if (endpoint)
@@ -330,6 +331,8 @@ int zapisyProxy::dodajTermin(const char *endpoint, const char *soap_action, z1__
 		soap_endpoint = "http://127.0.0.1/";
 	if (soap_action == NULL)
 		soap_action = "";
+	soap_tmp_z1__dodajTermin.przedmiotID = przedmiotID;
+	soap_tmp_z1__dodajTermin.salaID = salaID;
 	soap_tmp_z1__dodajTermin.termin = termin;
 	soap_begin(soap);
 	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
@@ -536,6 +539,574 @@ int zapisyProxy::eksportujPrzedmiot(const char *endpoint, const char *soap_actio
 	if (soap_recv_fault(soap, 1))
 		return soap->error;
 	soap_get_z1__eksportujPrzedmiotResponse(soap, &_param_7, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::dodajPrzedmiot(const char *endpoint, const char *soap_action, std::string importowanyPrzedmiot, z1__temat *projekt, struct z1__dodajPrzedmiotResponse &_param_8)
+{	struct soap *soap = this->soap;
+	struct z1__dodajPrzedmiot soap_tmp_z1__dodajPrzedmiot;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__dodajPrzedmiot.importowanyPrzedmiot = importowanyPrzedmiot;
+	soap_tmp_z1__dodajPrzedmiot.projekt = projekt;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__dodajPrzedmiot(soap, &soap_tmp_z1__dodajPrzedmiot);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__dodajPrzedmiot(soap, &soap_tmp_z1__dodajPrzedmiot, "z1:dodajPrzedmiot", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__dodajPrzedmiot(soap, &soap_tmp_z1__dodajPrzedmiot, "z1:dodajPrzedmiot", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_8)
+		return soap_closesock(soap);
+	soap_default_z1__dodajPrzedmiotResponse(soap, &_param_8);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__dodajPrzedmiotResponse(soap, &_param_8, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::dodajProwadzacego(const char *endpoint, const char *soap_action, z1__prowadzacy *daneProwadzacego, struct z1__dodajProwadzacegoResponse &_param_9)
+{	struct soap *soap = this->soap;
+	struct z1__dodajProwadzacego soap_tmp_z1__dodajProwadzacego;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__dodajProwadzacego.daneProwadzacego = daneProwadzacego;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__dodajProwadzacego(soap, &soap_tmp_z1__dodajProwadzacego);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__dodajProwadzacego(soap, &soap_tmp_z1__dodajProwadzacego, "z1:dodajProwadzacego", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__dodajProwadzacego(soap, &soap_tmp_z1__dodajProwadzacego, "z1:dodajProwadzacego", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_9)
+		return soap_closesock(soap);
+	soap_default_z1__dodajProwadzacegoResponse(soap, &_param_9);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__dodajProwadzacegoResponse(soap, &_param_9, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::zmienDaneProwadzacego(const char *endpoint, const char *soap_action, z1__prowadzacy *daneProwadzacego, struct z1__zmienDaneProwadzacegoResponse &_param_10)
+{	struct soap *soap = this->soap;
+	struct z1__zmienDaneProwadzacego soap_tmp_z1__zmienDaneProwadzacego;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__zmienDaneProwadzacego.daneProwadzacego = daneProwadzacego;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__zmienDaneProwadzacego(soap, &soap_tmp_z1__zmienDaneProwadzacego);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__zmienDaneProwadzacego(soap, &soap_tmp_z1__zmienDaneProwadzacego, "z1:zmienDaneProwadzacego", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__zmienDaneProwadzacego(soap, &soap_tmp_z1__zmienDaneProwadzacego, "z1:zmienDaneProwadzacego", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_10)
+		return soap_closesock(soap);
+	soap_default_z1__zmienDaneProwadzacegoResponse(soap, &_param_10);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__zmienDaneProwadzacegoResponse(soap, &_param_10, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::usunProwadzacego(const char *endpoint, const char *soap_action, std::string ID, struct z1__usunProwadzacegoResponse &_param_11)
+{	struct soap *soap = this->soap;
+	struct z1__usunProwadzacego soap_tmp_z1__usunProwadzacego;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__usunProwadzacego.ID = ID;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__usunProwadzacego(soap, &soap_tmp_z1__usunProwadzacego);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__usunProwadzacego(soap, &soap_tmp_z1__usunProwadzacego, "z1:usunProwadzacego", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__usunProwadzacego(soap, &soap_tmp_z1__usunProwadzacego, "z1:usunProwadzacego", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_11)
+		return soap_closesock(soap);
+	soap_default_z1__usunProwadzacegoResponse(soap, &_param_11);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__usunProwadzacegoResponse(soap, &_param_11, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::dodajStudenta(const char *endpoint, const char *soap_action, std::string przedmiotID, z1__student *student, struct z1__dodajStudentaResponse &_param_12)
+{	struct soap *soap = this->soap;
+	struct z1__dodajStudenta soap_tmp_z1__dodajStudenta;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__dodajStudenta.przedmiotID = przedmiotID;
+	soap_tmp_z1__dodajStudenta.student = student;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__dodajStudenta(soap, &soap_tmp_z1__dodajStudenta);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__dodajStudenta(soap, &soap_tmp_z1__dodajStudenta, "z1:dodajStudenta", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__dodajStudenta(soap, &soap_tmp_z1__dodajStudenta, "z1:dodajStudenta", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_12)
+		return soap_closesock(soap);
+	soap_default_z1__dodajStudentaResponse(soap, &_param_12);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__dodajStudentaResponse(soap, &_param_12, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::usunStudentaZPrzedmiotu(const char *endpoint, const char *soap_action, std::string przedmiotID, z1__student *student, struct z1__usunStudentaZPrzedmiotuResponse &_param_13)
+{	struct soap *soap = this->soap;
+	struct z1__usunStudentaZPrzedmiotu soap_tmp_z1__usunStudentaZPrzedmiotu;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__usunStudentaZPrzedmiotu.przedmiotID = przedmiotID;
+	soap_tmp_z1__usunStudentaZPrzedmiotu.student = student;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__usunStudentaZPrzedmiotu(soap, &soap_tmp_z1__usunStudentaZPrzedmiotu);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__usunStudentaZPrzedmiotu(soap, &soap_tmp_z1__usunStudentaZPrzedmiotu, "z1:usunStudentaZPrzedmiotu", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__usunStudentaZPrzedmiotu(soap, &soap_tmp_z1__usunStudentaZPrzedmiotu, "z1:usunStudentaZPrzedmiotu", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_13)
+		return soap_closesock(soap);
+	soap_default_z1__usunStudentaZPrzedmiotuResponse(soap, &_param_13);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__usunStudentaZPrzedmiotuResponse(soap, &_param_13, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::usunWszystkichZPrzedmiotu(const char *endpoint, const char *soap_action, std::string ID, struct z1__usunWszystkichZPrzedmiotuResponse &_param_14)
+{	struct soap *soap = this->soap;
+	struct z1__usunWszystkichZPrzedmiotu soap_tmp_z1__usunWszystkichZPrzedmiotu;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__usunWszystkichZPrzedmiotu.ID = ID;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__usunWszystkichZPrzedmiotu(soap, &soap_tmp_z1__usunWszystkichZPrzedmiotu);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__usunWszystkichZPrzedmiotu(soap, &soap_tmp_z1__usunWszystkichZPrzedmiotu, "z1:usunWszystkichZPrzedmiotu", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__usunWszystkichZPrzedmiotu(soap, &soap_tmp_z1__usunWszystkichZPrzedmiotu, "z1:usunWszystkichZPrzedmiotu", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_14)
+		return soap_closesock(soap);
+	soap_default_z1__usunWszystkichZPrzedmiotuResponse(soap, &_param_14);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__usunWszystkichZPrzedmiotuResponse(soap, &_param_14, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::usunPrzedmiot(const char *endpoint, const char *soap_action, std::string ID, struct z1__usunPrzedmiotResponse &_param_15)
+{	struct soap *soap = this->soap;
+	struct z1__usunPrzedmiot soap_tmp_z1__usunPrzedmiot;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__usunPrzedmiot.ID = ID;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__usunPrzedmiot(soap, &soap_tmp_z1__usunPrzedmiot);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__usunPrzedmiot(soap, &soap_tmp_z1__usunPrzedmiot, "z1:usunPrzedmiot", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__usunPrzedmiot(soap, &soap_tmp_z1__usunPrzedmiot, "z1:usunPrzedmiot", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_15)
+		return soap_closesock(soap);
+	soap_default_z1__usunPrzedmiotResponse(soap, &_param_15);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__usunPrzedmiotResponse(soap, &_param_15, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::edytujProjekt(const char *endpoint, const char *soap_action, std::string przedmiotID, std::string projektID, z1__temat *projekt, struct z1__edytujProjektResponse &_param_16)
+{	struct soap *soap = this->soap;
+	struct z1__edytujProjekt soap_tmp_z1__edytujProjekt;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__edytujProjekt.przedmiotID = przedmiotID;
+	soap_tmp_z1__edytujProjekt.projektID = projektID;
+	soap_tmp_z1__edytujProjekt.projekt = projekt;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__edytujProjekt(soap, &soap_tmp_z1__edytujProjekt);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__edytujProjekt(soap, &soap_tmp_z1__edytujProjekt, "z1:edytujProjekt", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__edytujProjekt(soap, &soap_tmp_z1__edytujProjekt, "z1:edytujProjekt", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_16)
+		return soap_closesock(soap);
+	soap_default_z1__edytujProjektResponse(soap, &_param_16);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__edytujProjektResponse(soap, &_param_16, "", NULL);
+	if (soap->error)
+		return soap_recv_fault(soap, 0);
+	if (soap_body_end_in(soap)
+	 || soap_envelope_end_in(soap)
+	 || soap_end_recv(soap))
+		return soap_closesock(soap);
+	return soap_closesock(soap);
+}
+
+int zapisyProxy::edytujTermin(const char *endpoint, const char *soap_action, std::string przedmiotID, std::string terminID, std::string salaID, z1__termin *termin, struct z1__edytujTerminResponse &_param_17)
+{	struct soap *soap = this->soap;
+	struct z1__edytujTermin soap_tmp_z1__edytujTermin;
+	if (endpoint)
+		soap_endpoint = endpoint;
+	if (soap_endpoint == NULL)
+		soap_endpoint = "http://127.0.0.1/";
+	if (soap_action == NULL)
+		soap_action = "";
+	soap_tmp_z1__edytujTermin.przedmiotID = przedmiotID;
+	soap_tmp_z1__edytujTermin.terminID = terminID;
+	soap_tmp_z1__edytujTermin.salaID = salaID;
+	soap_tmp_z1__edytujTermin.termin = termin;
+	soap_begin(soap);
+	soap->encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/";
+	soap_serializeheader(soap);
+	soap_serialize_z1__edytujTermin(soap, &soap_tmp_z1__edytujTermin);
+	if (soap_begin_count(soap))
+		return soap->error;
+	if (soap->mode & SOAP_IO_LENGTH)
+	{	if (soap_envelope_begin_out(soap)
+		 || soap_putheader(soap)
+		 || soap_body_begin_out(soap)
+		 || soap_put_z1__edytujTermin(soap, &soap_tmp_z1__edytujTermin, "z1:edytujTermin", NULL)
+		 || soap_body_end_out(soap)
+		 || soap_envelope_end_out(soap))
+			 return soap->error;
+	}
+	if (soap_end_count(soap))
+		return soap->error;
+	if (soap_connect(soap, soap_endpoint, soap_action)
+	 || soap_envelope_begin_out(soap)
+	 || soap_putheader(soap)
+	 || soap_body_begin_out(soap)
+	 || soap_put_z1__edytujTermin(soap, &soap_tmp_z1__edytujTermin, "z1:edytujTermin", NULL)
+	 || soap_body_end_out(soap)
+	 || soap_envelope_end_out(soap)
+	 || soap_end_send(soap))
+		return soap_closesock(soap);
+	if (!&_param_17)
+		return soap_closesock(soap);
+	soap_default_z1__edytujTerminResponse(soap, &_param_17);
+	if (soap_begin_recv(soap)
+	 || soap_envelope_begin_in(soap)
+	 || soap_recv_header(soap)
+	 || soap_body_begin_in(soap))
+		return soap_closesock(soap);
+	if (soap_recv_fault(soap, 1))
+		return soap->error;
+	soap_get_z1__edytujTerminResponse(soap, &_param_17, "", NULL);
 	if (soap->error)
 		return soap_recv_fault(soap, 0);
 	if (soap_body_end_in(soap)

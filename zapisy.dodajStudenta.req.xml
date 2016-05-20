@@ -6,9 +6,13 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:z1="localhost/zapisy.wsdl">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <z1:zapiszProjekt>
-   <projektID></projektID>
-   <zapisywanyID></zapisywanyID>
-  </z1:zapiszProjekt>
+  <z1:dodajStudenta>
+   <przedmiotID></przedmiotID>
+   <student>
+    <imie></imie>
+    <nazwisko></nazwisko>
+    <index></index>
+   </student>
+  </z1:dodajStudenta>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

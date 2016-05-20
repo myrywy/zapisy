@@ -6,9 +6,16 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns:z1="localhost/zapisy.wsdl">
  <SOAP-ENV:Body  SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-  <z1:zapiszProjekt>
-   <projektID></projektID>
-   <zapisywanyID></zapisywanyID>
-  </z1:zapiszProjekt>
+  <z1:edytujTermin>
+   <przedmiotID></przedmiotID>
+   <terminID></terminID>
+   <salaID></salaID>
+   <termin>
+    <dzien></dzien>
+    <godzinaOd></godzinaOd>
+    <godzinaDo></godzinaDo>
+    <miejsca>0</miejsca>
+   </termin>
+  </z1:edytujTermin>
  </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
